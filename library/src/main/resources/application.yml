@@ -1,0 +1,82 @@
+# 端口配置
+server:
+  port: 8443
+  # 开启 gzip 压缩
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+    min-response-size: 1024
+
+spring:
+  # redis 只用作缓存，不作为 repository
+  data:
+    redis:
+      repositories:
+        enabled: false
+    # 数据源配置
+  datasource:
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/library_manager?characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    hikari:
+      ##  Hikari 连接池配置
+      ## 最小空闲连接数量
+      minimum-idle: 5
+      ## 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      ## 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      ## 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      ## 连接池名
+      pool-name: library
+      ## 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      ## 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+  redis:
+    host: localhost
+    port: 6379
+    # Redis 数据库索引（默认为 0）
+    database: 0
+    # Redis 服务器连接密码（默认为空）
+    password:
+    #连接池最大连接数（使用负值表示没有限制）
+    lettuce:
+      pool:
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
+    # 连接超时时间（毫秒）
+    timeout: 2000
+
+# health是否显示细节，可选never,always,when-authenticated
+management:
+  endpoint:
+    health:
+      show-details: always
+  # 公开所有端点，默认只有端点/health和/info端点是暴露的，可以通过include和exclude进行包括和排除
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude: env
+
+# 只打印SQL语句
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 以日志形式打印SQL语句
+logging:
+  level:
+    com.library.manage.mapper: debug
