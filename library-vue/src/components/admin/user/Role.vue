@@ -12,7 +12,7 @@
         </el-form-item>
         <el-form-item label="功能配置" label-width="120px" prop="perms">
           <el-checkbox-group v-model="selectedPermsIds">
-            <el-checkbox v-for="(perm,i) in perms" :key="i" :label="perm.id">{{perm.desc_}}</el-checkbox>
+            <el-checkbox v-for="(perm,i) in perms" :key="i" :label="perm.id">{{perm.descname}}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="菜单配置" label-width="120px" prop="menus">
@@ -226,6 +226,7 @@
           name: role.name,
           nameZh: role.nameZh,
           enabled: role.enabled,
+          menuIds: this.$refs.tree.getCheckedKeys(),
           perms: perms
         }).then(resp => {
           if (resp && resp.data.code === 200) {
@@ -234,13 +235,14 @@
             this.listRoles()
           }
         })
-        this.$axios.put('/admin/role/menu?rid=' + role.id, {
-          menusIds: this.$refs.tree.getCheckedKeys()
-        }).then(resp => {
-          if (resp && resp.data.code === 200) {
-            console.log(resp.data.result)
-          }
-        })
+        // this.$axios.put('/admin/role/menu', {
+        //   rid: role.id,
+        //   menusIds: this.$refs.tree.getCheckedKeys()
+        // }).then(resp => {
+        //   if (resp && resp.data.code === 200) {
+        //     console.log(resp.data.result)
+        //   }
+        // })
       }
     }
   }

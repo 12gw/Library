@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @author Evan
- * @date 2019/11
- */
 @Repository
 public interface AdminUserRoleMapper extends BaseMapper<AdminUserRole> {
     @Insert("<script>INSERT INTO admin_user_role(uid,rid) " +

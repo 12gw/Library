@@ -1,7 +1,7 @@
 package com.library.manage.config;
 
-import com.library.manage.filter.URLPathMatchingFilter;
-import com.library.manage.realm.ShiroRealm;
+import com.library.manage.config.filter.URLPathMatchingFilter;
+import com.library.manage.config.realm.ShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -18,10 +18,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * @author Evan
- * @date 2019/4
- */
 @Configuration
 public class ShiroConfiguration {
     @Bean

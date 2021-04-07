@@ -7,7 +7,7 @@ import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.library.manage.VO.QueryBorrowListVO;
+import com.library.manage.model.vo.QueryBorrowListVO;
 import com.library.manage.entity.Book;
 import com.library.manage.entity.Borrow;
 import com.library.manage.entity.User;
@@ -32,18 +32,19 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class BorrowService {
+    private final static String ORDER_TYPE = "1";
+    private final static String NORMAL_TYPE = "0";
+    private final static String YUYUE_TYPE = "2";
+    private final static String OVERTIME_TYPE = "3";
+    private final static int STUDENT_ROLE = 10;
+    @Autowired
+    AdminUserRoleService adminUserRoleService;
     @Autowired
     private BorrowMapper borrowmapper;
     @Autowired
     private BookMapper bookMapper;
     @Autowired
     private UserService userService;
-
-    private final static String ORDER_TYPE = "1";
-    private final static String NORMAL_TYPE = "0";
-    private final static String YUYUE_TYPE = "2";
-    private final static int STUDENT_ROLE = 10;
-
 
     /**
      * 新增借阅记录
@@ -71,29 +72,30 @@ public class BorrowService {
                 Book books = bookMapper.selectOne(Wrappers.<Book>lambdaQuery().eq(Book::getId, bookid).between(level >= 10, Book::getCid, 1, 4));
                 if (null != books) {
                     Book book = new Book();
-                    if (ORDER_TYPE.equals(type)) {
-                        borrow.setStatus(YUYUE_TYPE);
-                    }else if (NORMAL_TYPE.equals(type)){
-                        borrow.setStatus(ORDER_TYPE);
-                    }
-                    if (books.getStock() > 0) {
-                        book.setStock(books.getStock() - 1);
-                    } else {
-                        if (ORDER_TYPE.equals(type)) {
+                    if (books.getStock() > 0 && books.getStock() < books.getSum()) {
+                        if (NORMAL_TYPE.equals(type)) {
+                            borrow.setStatus(ORDER_TYPE);
+                        } else if (ORDER_TYPE.equals(type)) {
                             borrow.setStatus(YUYUE_TYPE);
-                        }else {
-                            return 0;
+                        }
+                        book.setStock(books.getStock() - 1);
+                    } else if (books.getStock() == 0) {
+                        if (NORMAL_TYPE.equals(type)) {
+                            return 3;
+                        } else if (ORDER_TYPE.equals(type)) {
+//                            TODO
+                            return 3;
                         }
                     }
                     bookMapper.update(book, Wrappers.<Book>lambdaQuery().eq(Book::getId, bookid));
                 }
+                level = borrowmapper.insert(borrow);
                 if (ORDER_TYPE.equals(type)) {
                     this.order(mailAccount);
                 }
-                return borrowmapper.insert(borrow);
+                return level;
             } catch (Exception e) {
                 log.error("保存出错");
-                e.printStackTrace();
             }
         }
         return 0;
@@ -117,18 +119,7 @@ public class BorrowService {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         page.setRecords(borrowIPage.getRecords().stream().peek(m -> {
             //计算是否需要罚款，还书时间为空，且状态为未还  则用借书时间-当前查看时间，一天1块
-            if (m.getReturnTime() == null && ORDER_TYPE.equals(m.getStatus())) {
-                long time = 0;
-                try {
-                    time = DateUtil.between(df.parse(m.getBorrowTime()), DateUtil.date(), DateUnit.DAY);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                if (time > 60) {
-                    m.setMoney((int) (time - 60));
-                    borrowmapper.updateById(m);
-                }
-            }
+            this.upBorrow(df, m);
             if (ORDER_TYPE.equals(m.getType())) {
                 m.setType("预约借书");
             } else if (NORMAL_TYPE.equals(m.getType())) {
@@ -136,6 +127,30 @@ public class BorrowService {
             }
         }).collect(Collectors.toList()));
         return page;
+    }
+
+    private void upBorrow(DateFormat df, Borrow m) {
+        if (m.getReturnTime() == null && (ORDER_TYPE.equals(m.getStatus()) || YUYUE_TYPE.equals(m.getStatus()))) {
+            long time = 0;
+            try {
+                time = DateUtil.between(df.parse(m.getBorrowTime()), DateUtil.date(), DateUnit.DAY);
+            } catch (ParseException e) {
+                log.error("时间处理出错！");
+            }
+            if (time > 60) {
+                m.setMoney((int) (time - 60));
+            }
+            //如果预约的时间超过一个星期
+            if (time > 7) {
+                m.setStatus(OVERTIME_TYPE);
+                Book book = bookMapper.selectOne(Wrappers.<Book>lambdaQuery().eq(Book::getId, m.getBookid()));
+                if (null != book && book.getStock() < book.getSum()) {
+                    book.setStock(book.getStock() + 1);
+                    bookMapper.updateById(book);
+                }
+            }
+            borrowmapper.updateById(m);
+        }
     }
 
     /**
@@ -154,6 +169,7 @@ public class BorrowService {
             //0已还书
             // 1未还书  传入的status为1时，更新状态为已还书0
             // 2已预约  更新状态为1 未还书
+            // 3预约超时
             if (ORDER_TYPE.equals(status)) {
                 borrow.setStatus(NORMAL_TYPE);
                 Book book = bookMapper.selectOne(Wrappers.<Book>lambdaQuery().eq(Book::getId, bookid));
@@ -192,8 +208,8 @@ public class BorrowService {
     }
 
     @Async("asyncPool")
-    public void queryStatus(String userName) {
-        int role = userService.getUserRole(userName);
+    public void queryStatus(String userName, int id) {
+        int role = adminUserRoleService.getRole(id);
         if (STUDENT_ROLE == role) {
             Borrow borrow = borrowmapper.selectOne(Wrappers.<Borrow>lambdaQuery()
                     .eq(Borrow::getUsername, userName)

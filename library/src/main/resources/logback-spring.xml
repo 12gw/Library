@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!--自定义颜色配置-->
-    <conversionRule conversionWord="customcolor" converterClass="com.library.manage.config.LogbackColorful"/>
+    <conversionRule conversionWord="customcolor" converterClass="com.library.manage.config.log.LogbackColorful"/>
     <!--这个./是输入日志到运行代码的当前路径的logs中-->
     <property name="logback.logdir" value="./logs/${project.artifactId}"/>
     <property name="logback.appname" value="${project.artifactId}"/>
@@ -45,6 +45,7 @@
         <!--</encoder>-->
     <!--</appender>-->
     <logger name="com.library.manage.controller" level="DEBUG"/>
+    <logger name="com.library.manage.mapper" level="DEBUG"/>
     <!--指定最基础的日志输出级别-->
     <root level="info">
         <!--appender将会添加到这个loger-->

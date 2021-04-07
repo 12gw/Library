@@ -1,4 +1,4 @@
-package com.library.manage.VO;
+package com.library.manage.model.vo;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class GetBookListVO extends PageVO{
+public class GetBookListVO extends PageVO {
     private String keywords;
     private Integer cid;
 }

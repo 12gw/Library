@@ -1,8 +1,8 @@
 package com.library.manage.controller;
 
-import com.library.manage.VO.QueryMessageVO;
-import com.library.manage.result.Result;
-import com.library.manage.result.ResultFactory;
+import com.library.manage.model.vo.QueryMessageVO;
+import com.library.manage.config.result.Result;
+import com.library.manage.config.result.ResultFactory;
 import com.library.manage.service.MessageBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class MessageBoardController {
         return ResultFactory.buildSuccessResult(messageBoardService.messageBoardList(vo));
     }
 
-    @PutMapping("/api/admin/updateMessage")
+    @PutMapping("/api/admin/message/updateMessage")
     public Result updateMessage(@RequestParam(value = "message", required = false) String message,
                                 @RequestParam(value = "id", required = false) Integer id,
                                 @RequestParam(value = "status", required = false) String status,

@@ -10,12 +10,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-/**
- * User entity.
- *
- * @author Evan
- * @date 2019/4
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

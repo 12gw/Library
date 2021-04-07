@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Configuration
 @MapperScan("com.library.manage.mapper")
-//@ComponentScan(value = {"cn.cardoor.common.file.oss"})
 public class MybatisPlusConfig {
 
     /**

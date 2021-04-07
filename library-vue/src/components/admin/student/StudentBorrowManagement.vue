@@ -98,6 +98,7 @@
             <p v-if="scope.row.status==0">已还书</p>
             <p v-if="scope.row.status==1">未还书</p>
             <p v-if="scope.row.status==2">已预约</p>
+            <p v-if="scope.row.status==3">预约超时</p>
           </template>
         </el-table-column>
       </el-table>
@@ -145,6 +146,9 @@
         }, {
           value: '2',
           label: '已预约'
+        }, {
+          value: '3',
+          label: '预约超时'
         }],
         status: null
       }

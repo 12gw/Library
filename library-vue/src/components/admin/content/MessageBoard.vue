@@ -61,7 +61,7 @@
         param.append('type', this.form.type)
         param.append('status', this.form.status)
         this.$axios
-          .put('admin/updateMessage', param
+          .put('admin/message/updateMessage', param
           ).then(resp => {
           if (resp && resp.data.code === 200) {
             this.dialogFormVisible = false

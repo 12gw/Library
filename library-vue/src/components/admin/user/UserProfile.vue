@@ -37,6 +37,7 @@
         <el-breadcrumb-item>用户信息</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
+
     <bulk-registration @onSubmit="listUsers()"></bulk-registration>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
@@ -65,6 +66,11 @@
           label="真实姓名"
           fit>
         </el-table-column>
+<!--        <el-table-column-->
+<!--          prop="role.nameZh"-->
+<!--          label="角色名"-->
+<!--          fit>-->
+<!--        </el-table-column>-->
         <el-table-column
           prop="phone"
           label="手机号"

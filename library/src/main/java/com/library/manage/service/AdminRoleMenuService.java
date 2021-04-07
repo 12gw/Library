@@ -1,8 +1,9 @@
 package com.library.manage.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.library.manage.mapper.AdminRoleMenuMapper;
+import com.library.manage.entity.AdminMenu;
 import com.library.manage.entity.AdminRoleMenu;
+import com.library.manage.mapper.AdminRoleMenuMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -12,10 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Evan
- * @date 2019/11
- */
 @Service
 public class AdminRoleMenuService {
     @Autowired
@@ -25,7 +22,7 @@ public class AdminRoleMenuService {
         return adminRoleMenuMapper.selectList(Wrappers.<AdminRoleMenu>lambdaQuery().eq(AdminRoleMenu::getRid, rid));
     }
 
-    public List<AdminRoleMenu> findAllByRid(List<Integer> rids) {
+    public List<Integer> findAllByRid(List<Integer> rids) {
         return adminRoleMenuMapper.findAllByRid(rids);
     }
 
@@ -34,10 +31,10 @@ public class AdminRoleMenuService {
     }
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public void updateRoleMenu(int rid, Map<String, List<Integer>> menusIds) {
+    public void updateRoleMenu(int rid, List<Integer> menusIds) {
         adminRoleMenuMapper.deleteById(rid);
         List<AdminRoleMenu> rms = new ArrayList<>();
-        for (Integer mid : menusIds.get("menusIds")) {
+        for (Integer mid : menusIds) {
             AdminRoleMenu rm = new AdminRoleMenu();
             rm.setMid(mid);
             rm.setRid(rid);

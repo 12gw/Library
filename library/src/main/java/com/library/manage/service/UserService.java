@@ -2,23 +2,17 @@ package com.library.manage.service;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.library.manage.dto.UserDTO;
 import com.library.manage.entity.AdminRole;
 import com.library.manage.entity.User;
 import com.library.manage.mapper.UserMapper;
+import com.library.manage.model.dto.UserDTO;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-/**
- * @author Evan
- * @date 2019/4
- */
 @Service
 public class UserService {
     @Autowired
@@ -34,8 +28,11 @@ public class UserService {
      * @return
      */
     public List<UserDTO> list() {
-        List<User> users = userDAO.selectList(null);
-        List<UserDTO> userDTOS = users.stream().map(user -> (UserDTO) new UserDTO().convertFrom(user)).collect(Collectors.toList());
+//        List<User> users = userDAO.selectList(null);
+
+        List<UserDTO> userDTOS = userDAO.selectUserList();
+//        BeanUtil.copyProperties(userDTOS,users);new ArrayList<>();
+//        users.stream().map(user -> (UserDTO) new UserDTO().convertFrom(user)).collect(Collectors.toList());
         userDTOS.forEach(u -> {
             List<AdminRole> roles = adminRoleService.listRolesByUser(u.getUsername());
             u.setRoles(roles);
@@ -58,27 +55,13 @@ public class UserService {
     }
 
     public int register(User user) {
-        String username = user.getUsername();
-        String name = user.getName();
-        String phone = user.getPhone();
-        String email = user.getEmail();
-        String password = user.getPassword();
-
-        username = HtmlUtils.htmlEscape(username);
-        user.setUsername(username);
-        name = HtmlUtils.htmlEscape(name);
-        user.setName(name);
-        phone = HtmlUtils.htmlEscape(phone);
-        user.setPhone(phone);
-        email = HtmlUtils.htmlEscape(email);
-        user.setEmail(email);
         user.setEnabled(true);
 
-        if (username.equals("") || password.equals("")) {
+        if (StrUtil.isEmpty(user.getUsername()) || StrUtil.isEmpty(user.getPassword())) {
             return 0;
         }
 
-        boolean exist = isExist(username);
+        boolean exist = isExist(user.getUsername());
 
         if (exist) {
             return 2;
@@ -87,14 +70,12 @@ public class UserService {
         // 默认生成 16 位盐
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();
         int times = 2;
-        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
+        String encodedPassword = new SimpleHash("md5", user.getPassword(), salt, times).toString();
 
         user.setSalt(salt);
         user.setPassword(encodedPassword);
 
-        userDAO.insert(user);
-
-        return 1;
+        return userDAO.insert(user);
     }
 
     public void updateUserStatus(User user) {

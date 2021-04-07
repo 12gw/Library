@@ -1,11 +1,7 @@
-package com.library.manage.result;
+package com.library.manage.config.result;
 
 import lombok.Data;
 
-/**
- * @author Evan
- * @date 2019/4
- */
 @Data
 public class Result {
     private int code;

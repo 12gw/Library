@@ -1,4 +1,4 @@
-package com.library.manage.config;
+package com.library.manage.config.log;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -38,7 +38,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Aspect
 @Configuration
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-//@ConditionalOnExpression("${config.requestlog:false}")
 public class RequestLogAspect {
 
     private static final ParameterNameDiscoverer PARAMETER_NAME_DISCOVERER = new DefaultParameterNameDiscoverer();

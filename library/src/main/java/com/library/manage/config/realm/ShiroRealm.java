@@ -1,4 +1,4 @@
-package com.library.manage.realm;
+package com.library.manage.config.realm;
 
 import com.library.manage.entity.User;
 import com.library.manage.service.AdminPermissionService;
@@ -15,10 +15,6 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Set;
 
-/**
- * @author Evan
- * @date 2019/10
- */
 public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired

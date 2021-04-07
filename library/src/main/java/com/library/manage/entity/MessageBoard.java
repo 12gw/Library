@@ -5,13 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
-
-/**
- * @author whz
- * @ClassName: MessageBoardDO
- * @Description:
- */
 @Data
 @TableName("message_board")
 public class MessageBoard {

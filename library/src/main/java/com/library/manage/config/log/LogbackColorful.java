@@ -1,4 +1,4 @@
-package com.library.manage.config;
+package com.library.manage.config.log;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;

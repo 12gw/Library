@@ -7,12 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * Relations between roles and menus.
- *
- * @author Evan
- * @date 2019/11
- */
 @Data
 @TableName("admin_role_menu")
 @ToString

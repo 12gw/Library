@@ -10,12 +10,6 @@ import lombok.ToString;
 
 import java.util.List;
 
-/**
- * Menu entity
- *
- * @author Evan
- * @date 2019/11
- */
 @Data
 @TableName("admin_menu")
 @ToString

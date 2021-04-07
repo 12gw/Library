@@ -24,7 +24,8 @@
             const newRouter = createRouter()
             _this.$router.matcher = newRouter.matcher
           }
-        }).catch(failResponse => {})
+        }).catch(failResponse => {
+        })
       }
     }
   }
@@ -37,8 +38,9 @@
     line-height: 40px;
     min-width: 900px;
   }
+
   .el-icon-switch-button {
     cursor: pointer;
-    outline:0;
+    outline: 0;
   }
 </style>

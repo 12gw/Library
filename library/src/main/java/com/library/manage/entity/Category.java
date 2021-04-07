@@ -6,12 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * Category entity.
- *
- * @author Evan
- * @date 2019/4
- */
 @Data
 @TableName("category")
 @ToString

@@ -1,17 +1,12 @@
 package com.library.manage.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * Permission entity.
- *
- * @author Evan
- * @date 2019/11
- */
 @Data
 @TableName("admin_permission")
 @ToString
@@ -33,4 +28,7 @@ public class AdminPermission {
      * The path which triggers permission check.
      */
     private String url;
+
+    @TableField(exist = false)
+    private String descname;
 }

@@ -19,14 +19,10 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
-/**
- * @author Evan
- * @date 2020/4/23 21:51
- */
 @EnableCaching
 @Configuration
 public class RedisConfig extends CachingConfigurerSupport {
-    public static final String REDIS_KEY_DATABASE="wj";
+    public static final String REDIS_KEY_DATABASE = "wj";
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {

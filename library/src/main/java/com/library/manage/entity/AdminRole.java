@@ -8,12 +8,6 @@ import lombok.*;
 
 import java.util.List;
 
-/**
- * Role entity.
- *
- * @author Evan
- * @date 2019/11
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +16,7 @@ import java.util.List;
 @ToString
 public class AdminRole {
     @TableId(type = IdType.AUTO)
-    private int id;
+    private Integer id;
 
     /**
      * Role name.
@@ -51,4 +45,7 @@ public class AdminRole {
      */
     @TableField(exist = false)
     private List<AdminMenu> menus;
+
+    @TableField(exist = false)
+    private List<Integer> menuIds;
 }

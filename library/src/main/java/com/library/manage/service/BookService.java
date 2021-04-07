@@ -2,8 +2,7 @@ package com.library.manage.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.library.manage.VO.GetBookListVO;
-import com.library.manage.VO.PageVO;
+import com.library.manage.model.vo.GetBookListVO;
 import com.library.manage.entity.Book;
 import com.library.manage.mapper.BookMapper;
 import org.apache.shiro.SecurityUtils;
@@ -13,10 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author Evan
- * @date 2019/4
- */
 @Service
 public class BookService {
     @Autowired
@@ -45,10 +40,10 @@ public class BookService {
         Page<Book> page = new Page<>(vo.getCurrent(), vo.getSize());
         Integer level = userService.findByUsername(name).getLevel();
         if (level < 10) {
-            page.setRecords(bookDAO.getBookList(page, vo.getKeywords(), vo.getCid(),null));
+            page.setRecords(bookDAO.getBookList(page, vo.getKeywords(), vo.getCid(), null));
             return page;
         } else if (level <= 20 && level >= 10) {
-            page.setRecords(bookDAO.getBookList(page,vo.getKeywords(), vo.getCid(), level));
+            page.setRecords(bookDAO.getBookList(page, vo.getKeywords(), vo.getCid(), level));
             return page;
         } else {
             return null;
@@ -56,7 +51,11 @@ public class BookService {
     }
 
     public void addOrUpdate(Book book) {
-        bookDAO.insert(book);
+        if (book.getId() != null) {
+            bookDAO.updateById(book);
+        } else {
+            bookDAO.insert(book);
+        }
     }
 
     public void deleteById(int id) {

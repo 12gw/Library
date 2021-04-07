@@ -1,8 +1,8 @@
 package com.library.manage.controller;
 
 import com.library.manage.entity.User;
-import com.library.manage.result.Result;
-import com.library.manage.result.ResultFactory;
+import com.library.manage.config.result.Result;
+import com.library.manage.config.result.ResultFactory;
 import com.library.manage.service.AdminUserRoleService;
 import com.library.manage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

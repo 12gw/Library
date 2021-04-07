@@ -11,11 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * @author Evan
- * @date 2019/11
- */
 @Service
 public class AdminUserRoleService {
     @Autowired
@@ -24,11 +21,11 @@ public class AdminUserRoleService {
     @Autowired
     UserService userService;
 
-    public List<AdminUserRole> listAllByUid(int uid) {
-        return adminUserRoleMapper.selectList((Wrappers.<AdminUserRole>lambdaQuery().eq(AdminUserRole::getUid, uid)));
+    public List<Integer> listAllByUid(int uid) {
+        return adminUserRoleMapper.selectList((Wrappers.<AdminUserRole>lambdaQuery().eq(AdminUserRole::getUid, uid)))
+                .stream().map(AdminUserRole::getRid).collect(Collectors.toList());
     }
 
-    //    @Modifying
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void saveRoleChanges(int uid, List<AdminRole> roles) {
         adminUserRoleMapper.delete(Wrappers.<AdminUserRole>lambdaQuery().eq(AdminUserRole::getUid, uid));
@@ -42,7 +39,7 @@ public class AdminUserRoleService {
         adminUserRoleMapper.insertList(urs);
     }
 
-    public int getRole( int uid) {
+    public int getRole(int uid) {
         return adminUserRoleMapper.selectOne(Wrappers.<AdminUserRole>lambdaQuery().eq(AdminUserRole::getUid, uid)).getRid();
     }
 }

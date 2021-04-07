@@ -108,6 +108,7 @@
           <p v-if="scope.row.status==0">已还书</p>
           <p v-if="scope.row.status==1">未还书</p>
           <p v-if="scope.row.status==2">已预约</p>
+          <p v-if="scope.row.status==3">预约超时</p>
         </template>
         </el-table-column>
         <el-table-column
@@ -119,14 +120,14 @@
               @click.native.prevent="editBorrow(scope.row)"
               type="text"
               size="small"
-              :disabled ="scope.row.status == 0" >
+              :disabled ="scope.row.status == 0 || scope.row.status == 3 " >
               还书
             </el-button>
             <el-button
               @click.native.prevent="deleteBorrow(scope.row)"
               type="text"
               size="small"
-              :disabled ="scope.row.money == 0">
+              :disabled ="scope.row.money == 0 || scope.row.status == 3">
               交逾期罚款
             </el-button>
             <el-popover :ref="`popover-${scope.row.id}`" placement="top" width="160">
@@ -191,6 +192,9 @@
         }, {
           value: '2',
           label: '已预约'
+        }, {
+          value: '3',
+          label: '预约超时'
         }],
         status: null
       }
@@ -319,7 +323,7 @@
       },
       orderBorrow (item) {
         this.$axios
-          .put('admin/updateBorrow', {
+          .put('admin/borrow/updateBorrow', {
             id: item.id,
             username: item.username,
             status: item.status,

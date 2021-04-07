@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.library.manage.VO.QueryMessageVO;
+import com.library.manage.model.vo.QueryMessageVO;
 import com.library.manage.entity.MessageBoard;
 import com.library.manage.mapper.MessageBoardMapper;
 import org.apache.shiro.SecurityUtils;

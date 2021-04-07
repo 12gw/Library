@@ -9,17 +9,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @author Evan
- * @date 2019/11
- */
 @Repository
 public interface AdminRolePermissionMapper extends BaseMapper<AdminRolePermission> {
     @Insert("<script>INSERT INTO admin_role_permission(rid,pid) " +
-            "VALUES<foreach collection ='list' item='rps' separator =','>(#{rps.rid}, #{rps.pid}) </foreach ></script>")
-    void insertBatch(@Param("rps") List<AdminRolePermission> rps);
+            "VALUES<foreach collection ='list' item='list' separator =','>(#{list.rid}, #{list.pid}) </foreach ></script>")
+    void insertBatch(@Param("list") List<AdminRolePermission> rps);
 
     @Select("<script>SELECT pid FROM admin_role_permission " +
-            "WHERE rid=<foreach collection ='list' item='list' separator =','>#{list} </foreach ></script>")
+            "WHERE rid = <foreach collection ='list' item='list' separator =','>#{list} </foreach ></script>")
     List<Integer> selectBatchRids(@Param("list") List<Integer> list);
 }

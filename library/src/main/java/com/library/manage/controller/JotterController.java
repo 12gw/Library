@@ -1,9 +1,9 @@
 package com.library.manage.controller;
 
-import com.library.manage.VO.PageVO;
+import com.library.manage.model.vo.PageVO;
 import com.library.manage.entity.JotterArticle;
-import com.library.manage.result.Result;
-import com.library.manage.result.ResultFactory;
+import com.library.manage.config.result.Result;
+import com.library.manage.config.result.ResultFactory;
 import com.library.manage.service.JotterArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +23,8 @@ public class JotterController {
     }
 
     @GetMapping("/api/article")
-    public Result listArticles(PageVO vo ) {
-        return ResultFactory.buildSuccessResult(jotterArticleService.list(vo.getCurrent() , vo.getSize()));
+    public Result listArticles(PageVO vo) {
+        return ResultFactory.buildSuccessResult(jotterArticleService.list(vo.getCurrent(), vo.getSize()));
     }
 
     @GetMapping("/api/admin/article")
@@ -33,7 +33,7 @@ public class JotterController {
     }
 
     @DeleteMapping("/api/admin/content/article")
-    public Result deleteArticle( int id) {
+    public Result deleteArticle(int id) {
         jotterArticleService.delete(id);
         return ResultFactory.buildSuccessResult("删除成功");
     }

@@ -9,16 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @author Evan
- * @date 2019/11
- */
 @Repository
 public interface AdminRoleMenuMapper extends BaseMapper<AdminRoleMenu> {
-    @Select("<script>SELECT * FROM admin_role_menu WHERE rid = <foreach collection ='list' item='rms' separator =','>#{rms}</foreach ></script>")
-    List<AdminRoleMenu> findAllByRid(List<Integer> rids);
+    @Select("<script>SELECT mid FROM admin_role_menu WHERE rid = <foreach collection ='list' item='rms' separator =','>#{rms}</foreach ></script>")
+    List<Integer> findAllByRid(List<Integer> rids);
 
     @Insert("<script>INSERT INTO admin_role_menu(rid,mid) " +
-            "VALUES<foreach collection ='list' item='rms' separator =','>(#{rms.rid}, #{rms.mid}) </foreach ></script>")
-    void saveAll(@Param("rms") List<AdminRoleMenu> rms);
+            "VALUES<foreach collection ='list' item='list' separator =','>(#{list.rid}, #{list.mid}) </foreach ></script>")
+    void saveAll(@Param("list") List<AdminRoleMenu> rms);
 }

@@ -1,9 +1,5 @@
-package com.library.manage.result;
+package com.library.manage.config.result;
 
-/**
- * @author Evan
- * @date 2019/4
- */
 public enum ResultCode {
     SUCCESS(200),
     FAIL(400),

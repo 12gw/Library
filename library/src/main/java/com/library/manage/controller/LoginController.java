@@ -1,8 +1,8 @@
 package com.library.manage.controller;
 
 import com.library.manage.entity.User;
-import com.library.manage.result.Result;
-import com.library.manage.result.ResultFactory;
+import com.library.manage.config.result.Result;
+import com.library.manage.config.result.ResultFactory;
 import com.library.manage.service.BorrowService;
 import com.library.manage.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -43,7 +43,7 @@ public class LoginController {
             if (!user.isEnabled()) {
                 return ResultFactory.buildFailResult("该用户已被禁用");
             }
-            borrowService.queryStatus(username);
+            borrowService.queryStatus(username, user.getId());
             return ResultFactory.buildSuccessResult(username);
         } catch (IncorrectCredentialsException e) {
             return ResultFactory.buildFailResult("密码错误");

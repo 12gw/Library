@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: left">
+  <div style="text-align: right">
     <el-button class="add-button" type="success" @click="dialogFormVisible = true">添加图书</el-button>
     <el-dialog
       title="添加/修改图书"
@@ -32,7 +32,7 @@
           <el-input v-model="form.stock" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="分类" :label-width="formLabelWidth" prop="cid">
-        <el-select v-model="form.category.id" placeholder="请选择分类">
+        <el-select v-model="form.categoryName" placeholder="请选择分类">
           <el-option label="文学" value="1"></el-option>
           <el-option label="流行" value="2"></el-option>
           <el-option label="文化" value="3"></el-option>
@@ -72,10 +72,11 @@
           cid: '',
           sum: '',
           stock: '',
-          category: {
-            id: '',
-            name: ''
-          }
+          categoryName: ''
+          // category: {
+          //   id: '',
+          //   name: ''
+          // }
         },
         formLabelWidth: '120px'
       }
@@ -111,9 +112,14 @@
             abs: this.form.abs,
             sum: this.form.sum,
             stock: this.form.stock,
+            cid: this.form.categoryName,
             category: this.form.category
           }).then(resp => {
             if (resp && resp.data.code === 200) {
+              this.$message({
+                type: 'info',
+                message: resp.data.message
+              })
               this.dialogFormVisible = false
               this.$emit('onSubmit')
             }

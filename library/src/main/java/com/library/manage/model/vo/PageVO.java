@@ -1,4 +1,4 @@
-package com.library.manage.VO;
+package com.library.manage.model.vo;
 
 import lombok.Data;
 import lombok.ToString;

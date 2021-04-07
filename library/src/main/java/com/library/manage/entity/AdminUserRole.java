@@ -6,12 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.ToString;
 
-/**
- * Relations between users and role.
- *
- * @author Evan
- * @date 2019/11
- */
 @Data
 @TableName("admin_user_role")
 @ToString

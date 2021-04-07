@@ -1,8 +1,7 @@
-package com.library.manage.filter;
+package com.library.manage.config.filter;
 
+import com.library.manage.config.util.SpringContextUtils;
 import com.library.manage.service.AdminPermissionService;
-import com.library.manage.util.SpringContextUtils;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -17,10 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
-/**
- * @author Evan
- * @date 2019/11
- */
 @Slf4j
 public class URLPathMatchingFilter extends PathMatchingFilter {
     @Autowired
@@ -67,10 +62,10 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
             }
 
             if (hasPermission) {
-                log.trace("用户：" + username + "访问了：" + requestAPI + "接口");
+                log.info("用户：" + username + "访问了：" + requestAPI + "接口");
                 return true;
             } else {
-                log.warn("用户：" + username + "访问了没有权限的接口：" + requestAPI);
+                log.info("用户：" + username + "访问了没有权限的接口：" + requestAPI);
                 return false;
             }
         }

@@ -1,9 +1,5 @@
-package com.library.manage.result;
+package com.library.manage.config.result;
 
-/**
- * @author Evan
- * @date 2019/4
- */
 public class ResultFactory {
 
     public static Result buildSuccessResult(Object data) {

@@ -1,12 +1,36 @@
 <template>
   <div>
-    <el-row style="margin: 18px 0px 0px 18px ">
+    <el-row style="margin: 18px 0px 10px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
         <el-breadcrumb-item>内容管理</el-breadcrumb-item>
         <el-breadcrumb-item>图书管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
+    <el-form ref="form" label-width="100px">
+      <el-form-item label="书名或作者名">
+        <el-input
+          type="text"
+          placeholder="请输入需要搜索的书名或作者名"
+          v-model="keywords"
+          size="medium">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="分类">
+        <el-select v-model="cid" clearable placeholder="请选择" style="float: left">
+          <el-option
+            v-for="item in options"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click.native.prevent="loadBooks(1,size,cid,keywords)">搜索</el-button>
+        <el-button @click="handleReset()">重置</el-button>
+      </el-form-item>
+    </el-form>
     <edit-form @onSubmit="loadBooks()" ref="edit"></edit-form>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
@@ -109,11 +133,15 @@
         current: 1,
         size: 10,
         total: 0,
-        books: []
+        books: [],
+        options: [],
+        keywords: null,
+        cid: null
       }
     },
     mounted () {
-      this.loadBooks()
+      this.loadBooks(this.current, this.size, null, null)
+      this.loadOptions()
     },
     computed: {
       tableHeight () {
@@ -124,11 +152,12 @@
       // 初始页currentPage、初始每页数据数pagesize和数据data
       handleSizeChange: function (val) {
         this.size = val
-        this.loadBooks()
+        this.current = 1
+        this.loadBooks(this.current, this.size, this.cid, this.keywords)
       },
       handleCurrentChange: function (val) {
         this.current = val
-        this.loadBooks()
+        this.loadBooks(this.current, this.size, this.cid, this.keywords)
       },
       deleteBook (id) {
         this.$confirm('此操作将永久删除该书籍, 是否继续?', '提示', {
@@ -162,29 +191,37 @@
           abs: item.abs,
           stock: item.stock,
           sum: item.sum,
-          category: {
-            id: item.category.id.toString(),
-            name: item.category.name
-          }
+          cid: item.cid,
+          categoryName: item.categoryName
         }
-        // this.$refs.edit.category = {
-        //   id: item.category.id.toString()
-        // }
       },
-      loadBooks () {
+      loadOptions () {
         var _this = this
-        this.$axios.get('/bookLists',
-          {
-            params: {
-              current: _this.current,
-              size: _this.size
-            }
-          }).then(resp => {
+        this.$axios.get('admin/content/categories').then(resp => {
+          if (resp && resp.data.code === 200) {
+            _this.options = resp.data.result
+          }
+        })
+      },
+      loadBooks (current, size, cid, keywords) {
+        var _this = this
+        this.$axios.get('/bookLists', {
+          params: {
+            current: current,
+            size: size,
+            cid: cid,
+            keywords: keywords
+          }
+        }).then(resp => {
           if (resp && resp.data.code === 200) {
             _this.books = resp.data.result.records
             _this.total = resp.data.result.total
           }
         })
+      },
+      handleReset () {
+        this.cid = null
+        this.keywords = null
       }
     }
   }

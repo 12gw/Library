@@ -104,7 +104,8 @@
             <el-button
               @click.native.prevent="borrowBook(scope.row)"
               type="text"
-              size="small">
+              size="small"
+              :disabled="scope.row.stock==0">
               立即借阅
             </el-button>
             <el-button
@@ -181,6 +182,11 @@
               message: '借阅成功！请在两个月之内还书，预期按每天一元计算'
             })
             this.loadBooks(1, this.size, null, null)
+          } else {
+            this.$message({
+              type: 'info',
+              message: resp.data.message
+            })
           }
         })
       },
@@ -190,7 +196,20 @@
           id: item.id,
           title: item.title,
           type: '1'
-        }
+        }.then(resp => {
+          if (resp && resp.data.code === 200) {
+            this.$message({
+              type: 'info',
+              message: '预约借阅成功！'
+            })
+            this.loadBooks(1, this.size, null, null)
+          } else {
+            this.$message({
+              type: 'info',
+              message: resp.data.message
+            })
+          }
+        })
       },
       loadOptions () {
         var _this = this

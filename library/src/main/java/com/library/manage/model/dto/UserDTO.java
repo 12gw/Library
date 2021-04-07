@@ -1,20 +1,14 @@
-package com.library.manage.dto;
+package com.library.manage.model.dto;
 
-import com.library.manage.dto.base.OutputConverter;
 import com.library.manage.entity.AdminRole;
-import com.library.manage.entity.User;
 import lombok.Data;
 import lombok.ToString;
 
 import java.util.List;
 
-/**
- * @author Evan
- * @date 2020/4/1 19:57
- */
 @Data
 @ToString
-public class UserDTO implements OutputConverter<UserDTO, User> {
+public class UserDTO {
 
     private int id;
 
