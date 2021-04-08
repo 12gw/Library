@@ -1,8 +1,9 @@
 package com.library.manage.controller;
 
-import com.library.manage.model.vo.QueryMessageVO;
 import com.library.manage.config.result.Result;
 import com.library.manage.config.result.ResultFactory;
+import com.library.manage.model.vo.QueryMessageVO;
+import com.library.manage.model.vo.UpdateMessageVO;
 import com.library.manage.service.MessageBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +29,8 @@ public class MessageBoardController {
     }
 
     @PutMapping("/api/admin/message/updateMessage")
-    public Result updateMessage(@RequestParam(value = "message", required = false) String message,
-                                @RequestParam(value = "id", required = false) Integer id,
-                                @RequestParam(value = "status", required = false) String status,
-                                @RequestParam(value = "type", required = false) String type) {
-        int i = messageBoardService.updateMessage(message, status, id, type);
+    public Result updateMessage(UpdateMessageVO vo) {
+        int i = messageBoardService.updateMessage(vo.getMessage(), vo.getStatus(), vo.getId(), vo.getType());
         if (i == 0) {
             return ResultFactory.buildFailResult("更改失败");
         }

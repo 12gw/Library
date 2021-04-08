@@ -196,20 +196,20 @@
           id: item.id,
           title: item.title,
           type: '1'
-        }.then(resp => {
-          if (resp && resp.data.code === 200) {
-            this.$message({
-              type: 'info',
-              message: '预约借阅成功！'
-            })
-            this.loadBooks(1, this.size, null, null)
-          } else {
-            this.$message({
-              type: 'info',
-              message: resp.data.message
-            })
-          }
-        })
+        } // .then(resp => {
+        //   if (resp && resp.data.code === 200) {
+        //     this.$message({
+        //       type: 'info',
+        //       message: '预约借阅成功！'
+        //     })
+        //     this.loadBooks(1, this.size, null, null)
+        //   } else {
+        //     this.$message({
+        //       type: 'info',
+        //       message: resp.data.message
+        //     })
+        //   }
+        // })
       },
       loadOptions () {
         var _this = this

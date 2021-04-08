@@ -27,6 +27,11 @@ public class AdminMenuService {
 //        return adminMenuMapper.selectList(Wrappers.<AdminMenu>lambdaQuery().eq(AdminMenu::getParentId, parentId));
 //    }
 
+    /**
+     * 获取当前用户的菜单
+     *
+     * @return 菜单集合
+     */
     public List<AdminMenu> getMenusByCurrentUser() {
         // Get current user in DB.
         String username = SecurityUtils.getSubject().getPrincipal().toString();
@@ -48,6 +53,12 @@ public class AdminMenuService {
         return menuDTOList;
     }
 
+    /**
+     * 获取角色的菜单
+     *
+     * @param rid 角色id
+     * @return 菜单集合
+     */
     public List<AdminMenu> getMenusByRoleId(int rid) {
         List<Integer> menuIds = adminRoleMenuService.findAllByRid(rid)
                 .stream().map(AdminRoleMenu::getMid).collect(Collectors.toList());
@@ -76,6 +87,13 @@ public class AdminMenuService {
 //
 //        menus.removeIf(m -> m.getParentId() != 0);
 //    }
+
+    /**
+     * 获取子菜单
+     *
+     * @param level1Menu 一级菜单
+     * @param menus      全部菜单集合
+     */
     private List<AdminMenu> getChildren(AdminMenu level1Menu, List<AdminMenu> menus) {
         List<AdminMenu> children = new ArrayList<>();
         for (AdminMenu a : menus) {

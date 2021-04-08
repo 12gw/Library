@@ -58,9 +58,9 @@ public class AdminRoleService {
 
 
     public void addOrUpdate(AdminRole adminRole) {
-        if (adminRole.getId() != null){
+        if (adminRole.getId() != null) {
             adminRoleMapper.updateById(adminRole);
-        }else {
+        } else {
             adminRoleMapper.insert(adminRole);
         }
     }

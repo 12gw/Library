@@ -64,6 +64,10 @@
           .put('admin/message/updateMessage', param
           ).then(resp => {
           if (resp && resp.data.code === 200) {
+            this.$message({
+              type: 'info',
+              message: '修改成功'
+            })
             this.dialogFormVisible = false
             this.$emit('onSubmit')
           }

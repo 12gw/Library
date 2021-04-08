@@ -4,13 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 
-/**
- * @author whz
- * @Email: whz@dofun.cc
- * @ClassName: SaveBorrowVO
- * @Date: 2021/3/26 11:13
- * @Description:
- */
+
 @Data
 public class SaveBorrowVO {
     private Integer bookid;
@@ -18,6 +12,6 @@ public class SaveBorrowVO {
     private String type;
     private String status;
 
-    @Email(message = "wrong email format")
+    @Email(message = "邮件格式错误")
     private String mailAccount;
 }

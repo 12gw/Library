@@ -1,10 +1,10 @@
 package com.library.manage.controller;
 
+import com.library.manage.config.result.Result;
+import com.library.manage.config.result.ResultFactory;
 import com.library.manage.model.vo.QueryBorrowListVO;
 import com.library.manage.model.vo.SaveBorrowVO;
 import com.library.manage.model.vo.UpdateBorrowVO;
-import com.library.manage.config.result.Result;
-import com.library.manage.config.result.ResultFactory;
 import com.library.manage.service.BorrowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +23,8 @@ public class BorrowController {
             return ResultFactory.buildFailResult("由于您经常超期还书，现在不能借阅书籍！");
         } else if (i == 3) {
             return ResultFactory.buildFailResult("暂无库存，只能预约");
+        } else if (i == 4) {
+            return ResultFactory.buildFailResult("预约成功，请及时关注本书");
         }
         return ResultFactory.buildSuccessResult(i);
     }

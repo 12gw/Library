@@ -58,6 +58,12 @@ public class AdminPermissionService {
         return false;
     }
 
+    /**
+     * 根据角色id获取角色权限
+     *
+     * @param rid 角色id
+     * @return 权限列表
+     */
     public List<AdminPermission> listPermsByRoleId(int rid) {
         List<Integer> pids = adminRolePermissionService.findAllByRid(rid)
                 .stream().map(AdminRolePermission::getPid).collect(Collectors.toList());
@@ -67,6 +73,12 @@ public class AdminPermissionService {
         return adminPermissionMapper.selectBatchIds(pids);
     }
 
+    /**
+     * 根据登录名 获取该用户的权限url
+     *
+     * @param username 用户名
+     * @return 权限url集合
+     */
     public Set<String> listPermissionURLsByUser(String username) {
         List<Integer> rids = adminRoleService.listRolesByUser(username)
                 .stream().map(AdminRole::getId).collect(Collectors.toList());

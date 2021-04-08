@@ -264,7 +264,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-            this.$axios.put('admin/updateBorrow', {
+            this.$axios.put('admin/borrow/updateBorrow', {
               username: item.username,
               // status: item.status,
               money: item.money,
@@ -294,7 +294,7 @@
           type: 'warning'
         }).then(() => {
             this.$axios
-              .put('admin/updateBorrow', {
+              .put('admin/borrow/updateBorrow', {
                 id: item.id,
                 username: item.username,
                 status: item.status,

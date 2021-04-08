@@ -1,8 +1,8 @@
 package com.library.manage.controller;
 
-import com.library.manage.entity.User;
 import com.library.manage.config.result.Result;
 import com.library.manage.config.result.ResultFactory;
+import com.library.manage.entity.User;
 import com.library.manage.service.BorrowService;
 import com.library.manage.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -55,6 +55,7 @@ public class LoginController {
     @PostMapping("/api/register")
     public Result register(@RequestBody User user) {
         int status = userService.register(user);
+
         switch (status) {
             case 0:
                 return ResultFactory.buildFailResult("用户名和密码不能为空");

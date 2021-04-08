@@ -1,9 +1,9 @@
 package com.library.manage.controller;
 
-import com.library.manage.model.vo.PageVO;
-import com.library.manage.entity.JotterArticle;
 import com.library.manage.config.result.Result;
 import com.library.manage.config.result.ResultFactory;
+import com.library.manage.entity.JotterArticle;
+import com.library.manage.model.vo.PageVO;
 import com.library.manage.service.JotterArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

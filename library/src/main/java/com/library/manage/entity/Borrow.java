@@ -14,6 +14,7 @@ public class Borrow {
     private String type;
     private String bookname;
     private String status;
+    private String mail;
     private Integer money;
     private Integer bookid;
     private String borrowTime;

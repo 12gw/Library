@@ -7,12 +7,12 @@ import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.library.manage.model.vo.QueryBorrowListVO;
 import com.library.manage.entity.Book;
 import com.library.manage.entity.Borrow;
 import com.library.manage.entity.User;
 import com.library.manage.mapper.BookMapper;
 import com.library.manage.mapper.BorrowMapper;
+import com.library.manage.model.vo.QueryBorrowListVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -32,10 +32,15 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class BorrowService {
+    //状态 -- 未还书   借阅类型 -- 预约借书
     private final static String ORDER_TYPE = "1";
+    //状态 -- 已还书  借阅类型 -- 普通借书
     private final static String NORMAL_TYPE = "0";
+    //状态 -- 已预约
     private final static String YUYUE_TYPE = "2";
+    //状态 -- 预约超时
     private final static String OVERTIME_TYPE = "3";
+    //角色 -- 学生
     private final static int STUDENT_ROLE = 10;
     @Autowired
     AdminUserRoleService adminUserRoleService;
@@ -77,21 +82,22 @@ public class BorrowService {
                             borrow.setStatus(ORDER_TYPE);
                         } else if (ORDER_TYPE.equals(type)) {
                             borrow.setStatus(YUYUE_TYPE);
+                            borrow.setMail(mailAccount);
                         }
                         book.setStock(books.getStock() - 1);
+                        bookMapper.update(book, Wrappers.<Book>lambdaQuery().eq(Book::getId, bookid));
                     } else if (books.getStock() == 0) {
                         if (NORMAL_TYPE.equals(type)) {
                             return 3;
                         } else if (ORDER_TYPE.equals(type)) {
-//                            TODO
-                            return 3;
+                            borrow.setStatus(YUYUE_TYPE);
+                            borrow.setMail(mailAccount);
                         }
                     }
-                    bookMapper.update(book, Wrappers.<Book>lambdaQuery().eq(Book::getId, bookid));
                 }
                 level = borrowmapper.insert(borrow);
                 if (ORDER_TYPE.equals(type)) {
-                    this.order(mailAccount);
+                    this.order(mailAccount, ORDER_TYPE);
                 }
                 return level;
             } catch (Exception e) {
@@ -108,14 +114,13 @@ public class BorrowService {
         Subject subject = SecurityUtils.getSubject();
         String name = subject.getPrincipal().toString();
         Page<Borrow> page = new Page<>(vo.getCurrent(), vo.getSize());
-        IPage<Borrow> borrowIPage = borrowmapper.selectPage(page,
-                Wrappers.<Borrow>lambdaQuery()
-                        .like(StringUtils.isNotBlank(vo.getUsername()), Borrow::getUsername, vo.getUsername())
-                        .like(StringUtils.isNotBlank(vo.getBookname()), Borrow::getBookname, vo.getBookname())
-                        .eq(userService.getUserRole(name) == STUDENT_ROLE, Borrow::getUsername, name)
-                        .eq(StringUtils.isNotBlank(vo.getStatus()), Borrow::getStatus, vo.getStatus())
-                        .eq(StringUtils.isNotBlank(vo.getType()), Borrow::getType, vo.getType())
-                        .orderByAsc(Borrow::getBorrowTime));
+        IPage<Borrow> borrowIPage = borrowmapper.selectPage(page, Wrappers.<Borrow>lambdaQuery()
+                .like(StringUtils.isNotBlank(vo.getUsername()), Borrow::getUsername, vo.getUsername())
+                .like(StringUtils.isNotBlank(vo.getBookname()), Borrow::getBookname, vo.getBookname())
+                .eq(userService.getUserRole(name) == STUDENT_ROLE, Borrow::getUsername, name)
+                .eq(StringUtils.isNotBlank(vo.getStatus()), Borrow::getStatus, vo.getStatus())
+                .eq(StringUtils.isNotBlank(vo.getType()), Borrow::getType, vo.getType())
+                .orderByAsc(Borrow::getBorrowTime));
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         page.setRecords(borrowIPage.getRecords().stream().peek(m -> {
             //计算是否需要罚款，还书时间为空，且状态为未还  则用借书时间-当前查看时间，一天1块
@@ -174,8 +179,25 @@ public class BorrowService {
                 borrow.setStatus(NORMAL_TYPE);
                 Book book = bookMapper.selectOne(Wrappers.<Book>lambdaQuery().eq(Book::getId, bookid));
                 if (null != book) {
-                    book.setStock(book.getStock() + 1);
-                    bookMapper.updateById(book);
+                    //有人还书过后，如果书籍的在库数量为0 ，查询是否有预约借书的，如果有，则发邮件通知该读者
+                    if (book.getStock() == 0) {
+                        Borrow borrow1 = borrowmapper.selectOne(Wrappers.<Borrow>lambdaQuery()
+                                .eq(Borrow::getBookid, bookid)
+                                .eq(Borrow::getStatus, YUYUE_TYPE)
+                                .eq(Borrow::getType, ORDER_TYPE)
+                                .orderByDesc(Borrow::getBorrowTime)
+                                .last("LIMIT 1"));
+                        if (borrow1 != null && borrow1.getMail() != null) {
+                            order(borrow1.getMail(), YUYUE_TYPE);
+                        } else {
+                            book.setStock(book.getStock() + 1);
+                            bookMapper.updateById(book);
+                        }
+                    } else if (book.getStock() < book.getSum() && book.getStock() > 0) {
+                        //库存>在库数>0
+                        book.setStock(book.getStock() + 1);
+                        bookMapper.updateById(book);
+                    }
                 }
                 borrow.setReturnTime(DateUtil.now());
             } else if (YUYUE_TYPE.equals(status)) {
@@ -196,7 +218,7 @@ public class BorrowService {
     /**
      * 发送预约成功邮件
      */
-    private void order(String mailAccount) {
+    private void order(String mailAccount, String type) {
         MailAccount account = new MailAccount();
         account.setHost("smtp.qq.com");
         account.setPort(25);
@@ -204,9 +226,19 @@ public class BorrowService {
         account.setFrom("1747749585@qq.com");
         account.setUser("1747749585@qq.com");
         account.setPass("iaeclrbqwiljchdb"); //密码
-        MailUtil.send(account, mailAccount, "图书馆", "预约借书成功，请关注您所需要的图书。\n邮件来自图书馆", false);
+        if (ORDER_TYPE.equals(type)) {
+            MailUtil.send(account, mailAccount, "图书馆", "预约借书成功，请关注您所需要的图书。\n邮件来自图书馆", false);
+        } else if (YUYUE_TYPE.equals(type)) {
+            MailUtil.send(account, mailAccount, "图书馆", "您所预约的图书现在可以借阅了，请尽快来借阅。\n邮件来自图书馆", false);
+        }
     }
 
+    /**
+     * 查询借阅是否超时
+     *
+     * @param userName 用户名
+     * @param id       用户id
+     */
     @Async("asyncPool")
     public void queryStatus(String userName, int id) {
         int role = adminUserRoleService.getRole(id);

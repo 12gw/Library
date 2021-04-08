@@ -51,19 +51,20 @@ public class LibraryController {
     }
 
     @PostMapping("/api/admin/content/books/delete")
-    @ApiOperation(value = "查询图书列表")
+    @ApiOperation(value = "删除图书")
     public Result deleteBook(@RequestBody @Valid Book book) {
         bookService.deleteById(book.getId());
         return ResultFactory.buildSuccessResult("删除成功");
     }
 
     @GetMapping("/api/search")
-    @ApiOperation(value = "查询图书列表")
+    @ApiOperation(value = "搜索图书")
     public Result searchResult(@RequestParam("keywords") String keywords) {
         return ResultFactory.buildSuccessResult(bookService.Search(keywords));
     }
 
     @GetMapping("/api/categories/books")
+    @ApiOperation(value = "根据分类获取书籍")
     public Result listByCategory(int cid) throws Exception {
         if (0 != cid) {
             return ResultFactory.buildSuccessResult(bookService.listByCategory(cid));
@@ -73,7 +74,7 @@ public class LibraryController {
     }
 
     @PostMapping("/api/admin/content/books/covers")
-    @ApiOperation(value = "查询图书列表")
+    @ApiOperation(value = "上传图书封面")
     public String coversUpload(MultipartFile file) throws IOException {
 //        String folder = "C:/workspace/img";
 //        File imageFolder = new File(folder);
@@ -93,10 +94,17 @@ public class LibraryController {
     }
 
     @GetMapping("/api/admin/content/categories")
+    @ApiOperation(value = "图书类别")
     public Result categories() {
         return ResultFactory.buildSuccessResult(categoryService.list());
     }
 
+    /**
+     * 获取随机数
+     *
+     * @param length
+     * @return
+     */
     private static String getRandomString(int length) {
         String base = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();

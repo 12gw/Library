@@ -52,6 +52,10 @@
         }
           ).then(resp => {
           if (resp && resp.data.code === 200) {
+            this.$message({
+              type: 'info',
+              message: '预约成功'
+            })
             this.dialogFormVisible = false
             this.$emit('onSubmit')
           }

@@ -5,6 +5,7 @@ import com.library.manage.config.result.Result;
 import com.library.manage.config.result.ResultFactory;
 import com.library.manage.service.AdminUserRoleService;
 import com.library.manage.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 
 
 @RestController
+@Api(tags = "用户管理")
 public class UserController {
     @Autowired
     UserService userService;
