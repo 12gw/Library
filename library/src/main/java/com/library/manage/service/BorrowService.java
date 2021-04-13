@@ -74,7 +74,9 @@ public class BorrowService {
                 return 2;
             }
             try {
-                Book books = bookMapper.selectOne(Wrappers.<Book>lambdaQuery().eq(Book::getId, bookid).between(level >= 10, Book::getCid, 1, 4));
+                Book books = bookMapper.selectOne(Wrappers.<Book>lambdaQuery()
+                        .eq(Book::getId, bookid)
+                        .between(level >= 10, Book::getCid, 1, 4));
                 if (null != books) {
                     Book book = new Book();
                     if (books.getStock() > 0 && books.getStock() < books.getSum()) {
@@ -185,8 +187,7 @@ public class BorrowService {
                                 .eq(Borrow::getBookid, bookid)
                                 .eq(Borrow::getStatus, YUYUE_TYPE)
                                 .eq(Borrow::getType, ORDER_TYPE)
-                                .orderByDesc(Borrow::getBorrowTime)
-                                .last("LIMIT 1"));
+                                .orderByDesc(Borrow::getBorrowTime));
                         if (borrow1 != null && borrow1.getMail() != null) {
                             order(borrow1.getMail(), YUYUE_TYPE);
                         } else {

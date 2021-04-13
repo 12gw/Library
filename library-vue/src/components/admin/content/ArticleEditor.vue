@@ -3,7 +3,7 @@
     <el-row style="margin: 18px 0px 0px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard'}">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/admin/content/book'}">内容管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/admin/content/book'}">图书管理</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/admin/content/article'}">文章管理</el-breadcrumb-item>
         <el-breadcrumb-item>编辑器</el-breadcrumb-item>
       </el-breadcrumb>

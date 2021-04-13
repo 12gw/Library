@@ -3,7 +3,7 @@
     <el-row style="margin: 18px 0px 10px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item>学生系统</el-breadcrumb-item>
+        <el-breadcrumb-item>借阅管理</el-breadcrumb-item>
         <el-breadcrumb-item>借阅记录</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
@@ -36,8 +36,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click.native.prevent="select(value,status,bookname)">搜索</el-button>
-        <el-button @click="handleReset()">重置</el-button>
+        <el-button @click.native.prevent="select(value,status,bookname)" icon="el-icon-search">搜索</el-button>
+        <el-button @click="handleReset()" icon="el-icon-refresh-right">重置</el-button>
       </el-form-item>
     </el-form>
     <el-card style="margin: 18px 2%;width: 95%">

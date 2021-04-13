@@ -45,6 +45,7 @@ public class MessageBoardService {
                 .eq(StrUtil.isNotBlank(vo.getStatus()), MessageBoard::getStatus, vo.getStatus())
                 .eq(StrUtil.isNotBlank(vo.getType()), MessageBoard::getType, vo.getType())
                 .like(StrUtil.isNotBlank(vo.getMessage()), MessageBoard::getMessage, vo.getMessage())
+                .like(StrUtil.isNotBlank(vo.getUsername()), MessageBoard::getUsername, vo.getUsername())
                 .orderByDesc(MessageBoard::getCreateTime))
                 .getRecords());
         return page;

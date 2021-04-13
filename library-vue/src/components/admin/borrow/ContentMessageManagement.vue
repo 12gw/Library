@@ -3,8 +3,8 @@
     <el-row style="margin: 18px 5px 10px 18px ">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item>学生系统</el-breadcrumb-item>
-        <el-breadcrumb-item>借阅图书</el-breadcrumb-item>
+        <el-breadcrumb-item>借阅管理</el-breadcrumb-item>
+        <el-breadcrumb-item>反馈管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
     <el-form ref="form" label-width="100px">
@@ -37,8 +37,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click="select(content,status,type)">搜索</el-button>
-        <el-button @click="handleReset()">重置</el-button>
+        <el-button @click="select(content,status,type)" icon="el-icon-search">搜索</el-button>
+        <el-button @click="handleReset()" icon="el-icon-refresh-right">重置</el-button>
       </el-form-item>
     </el-form>
     <message-board @onSubmit="loadMessage(1, size, content , status ,type)" ref="message"></message-board>
@@ -132,7 +132,8 @@
             <el-button
               @click="editMessage(scope.row)"
               type="primary"
-              size="small">
+              size="small"
+              icon="el-icon-edit">
               编辑
             </el-button>
           </template>

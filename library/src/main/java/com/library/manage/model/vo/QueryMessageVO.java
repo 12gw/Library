@@ -8,4 +8,5 @@ public class QueryMessageVO extends PageVO {
     private String status;
     private String type;
     private String message;
+    private String username;
 }
