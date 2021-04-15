@@ -14,6 +14,8 @@
 </script>
 
 <style>
+  /*引入inconfont*/
+  @import url('//at.alicdn.com/t/font_2487650_x8k1k7g8hqf.css');
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

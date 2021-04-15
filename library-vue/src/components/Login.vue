@@ -4,11 +4,11 @@
              label-width="0px" v-loading="loading">
       <h3 class="login_title">系统登录</h3>
       <el-form-item prop="username">
-        <el-input type="text" v-model="loginForm.username"
+        <el-input prefix-icon="iconfont icon-denglu" type="text" v-model="loginForm.username"
                   auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" v-model="loginForm.password"
+        <el-input prefix-icon="iconfont icon-suo" type="password" v-model="loginForm.password"
                   auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <el-checkbox class="login_remember" v-model="checked"

@@ -16,7 +16,7 @@
           {{item.nameZh}}
         </span>
         <el-menu-item v-for="child in item.children" :key="child.path" :index="child.path">
-          <i :class="child.icon"></i>
+          <i :class="child.iconCls"></i>
           {{ child.nameZh }}
         </el-menu-item>
       </el-submenu>

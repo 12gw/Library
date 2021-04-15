@@ -27,7 +27,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click.native.prevent="loadBooks(1,size,cid,keywords)">搜索</el-button>
+        <el-button @click.native.prevent="loadBooks(1,size,cid,keywords)" icon="el-icon-search">搜索</el-button>
         <el-button @click="handleReset()">重置</el-button>
       </el-form-item>
     </el-form>

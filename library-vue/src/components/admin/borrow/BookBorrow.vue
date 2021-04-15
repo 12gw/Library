@@ -6,7 +6,7 @@
       @close="clear">
       <el-form v-model="form" style="text-align: left" ref="dataForm">
         <el-form-item label="预约邮箱" :label-width="formLabelWidth" prop="mailAccount">
-          <el-input v-model="form.mailAccount" autocomplete="off"></el-input>
+          <el-input prefix-icon="iconfont icon-youjian" v-model="form.mailAccount" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="书名" :label-width="formLabelWidth" prop="title">
           <el-input v-model="form.title" autocomplete="off"></el-input>

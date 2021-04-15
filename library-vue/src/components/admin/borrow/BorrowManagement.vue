@@ -114,9 +114,10 @@
         <el-table-column
           fixed="right"
           label="操作"
-          fit>
+          width="240">
           <template slot-scope="scope">
             <el-button
+              icon="iconfont icon-guihuan1"
               @click.native.prevent="editBorrow(scope.row)"
               type="text"
               size="small"
@@ -124,6 +125,7 @@
               还书
             </el-button>
             <el-button
+              icon="iconfont icon-qianfeijiaofei"
               @click.native.prevent="deleteBorrow(scope.row)"
               type="text"
               size="small"
@@ -140,7 +142,7 @@
                   确定
                 </el-button>
               </div>
-              <el-button slot="reference" type="text" size="small" :disabled ="scope.row.status !== '2'">
+              <el-button icon="iconfont icon-quzhong" slot="reference" type="text" size="small" :disabled ="scope.row.status !== '2'">
                 取书
               </el-button>
             </el-popover>

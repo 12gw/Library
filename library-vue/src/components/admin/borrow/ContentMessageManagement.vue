@@ -122,6 +122,7 @@
                 </el-button>
               </div>
               <el-button
+                icon="iconfont icon-shanchu1"
                 slot="reference"
                 type="danger"
                 size="small"
@@ -133,7 +134,7 @@
               @click="editMessage(scope.row)"
               type="primary"
               size="small"
-              icon="el-icon-edit">
+              icon="iconfont icon-bianji">
               编辑
             </el-button>
           </template>

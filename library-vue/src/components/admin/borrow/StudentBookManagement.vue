@@ -109,6 +109,7 @@
               立即借阅
             </el-button>
             <el-button
+              icon="iconfont icon-tushuyuyue"
               @click.native.prevent="preBorrowBook(scope.row)"
               type="text"
               size="small">
