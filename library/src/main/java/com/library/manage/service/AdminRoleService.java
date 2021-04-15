@@ -4,7 +4,6 @@ import com.library.manage.entity.AdminMenu;
 import com.library.manage.entity.AdminPermission;
 import com.library.manage.entity.AdminRole;
 import com.library.manage.mapper.AdminRoleMapper;
-import com.library.manage.mapper.AdminUserRoleMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,21 +15,17 @@ import java.util.List;
 @Slf4j
 public class AdminRoleService {
     @Autowired
-    AdminRoleMapper adminRoleMapper;
+    private AdminRoleMapper adminRoleMapper;
     @Autowired
-    AdminUserRoleMapper adminUserRoleMapper;
+    private UserService userService;
     @Autowired
-    UserService userService;
+    private AdminUserRoleService adminUserRoleService;
     @Autowired
-    AdminUserRoleService adminUserRoleService;
+    private AdminPermissionService adminPermissionService;
     @Autowired
-    AdminPermissionService adminPermissionService;
+    private AdminRolePermissionService adminRolePermissionService;
     @Autowired
-    AdminRolePermissionService adminRolePermissionService;
-    @Autowired
-    AdminRoleMenuService adminRoleMenuService;
-    @Autowired
-    AdminMenuService adminMenuService;
+    private AdminMenuService adminMenuService;
 
     public List<AdminRole> listWithPermsAndMenus() {
         try {

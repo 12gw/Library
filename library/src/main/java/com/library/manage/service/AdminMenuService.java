@@ -15,13 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class AdminMenuService {
     @Autowired
-    AdminMenuMapper adminMenuMapper;
+    private AdminMenuMapper adminMenuMapper;
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    AdminUserRoleService adminUserRoleService;
+    private AdminUserRoleService adminUserRoleService;
     @Autowired
-    AdminRoleMenuService adminRoleMenuService;
+    private AdminRoleMenuService adminRoleMenuService;
 
 //    public List<AdminMenu> getAllByParentId(int parentId) {
 //        return adminMenuMapper.selectList(Wrappers.<AdminMenu>lambdaQuery().eq(AdminMenu::getParentId, parentId));

@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class CategoryService {
     @Autowired
-    CategoryMapper categoryMapper;
+    private CategoryMapper categoryMapper;
 
     public List<Category> list() {
         return categoryMapper.selectList(Wrappers.<Category>lambdaQuery().orderByDesc(Category::getId));

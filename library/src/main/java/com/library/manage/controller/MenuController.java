@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MenuController {
     @Autowired
-    AdminMenuService adminMenuService;
+    private AdminMenuService adminMenuService;
 
     @GetMapping("/api/menu")
     public Result menu() {

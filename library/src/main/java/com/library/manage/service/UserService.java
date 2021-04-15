@@ -16,11 +16,11 @@ import java.util.List;
 @Service
 public class UserService {
     @Autowired
-    UserMapper userDAO;
+    private UserMapper userDAO;
     @Autowired
-    AdminRoleService adminRoleService;
+    private AdminRoleService adminRoleService;
     @Autowired
-    AdminUserRoleService adminUserRoleService;
+    private AdminUserRoleService adminUserRoleService;
 
     /**
      * 用户列表查询
@@ -28,11 +28,7 @@ public class UserService {
      * @return
      */
     public List<UserDTO> list() {
-//        List<User> users = userDAO.selectList(null);
-
         List<UserDTO> userDTOS = userDAO.selectUserList();
-//        BeanUtil.copyProperties(userDTOS,users);new ArrayList<>();
-//        users.stream().map(user -> (UserDTO) new UserDTO().convertFrom(user)).collect(Collectors.toList());
         userDTOS.forEach(u -> {
             List<AdminRole> roles = adminRoleService.listRolesByUser(u.getUsername());
             u.setRoles(roles);
@@ -122,5 +118,12 @@ public class UserService {
             }
         }
         return -1;
+    }
+
+    /**
+     * 根据用户id 获取用户名
+     */
+    public String getUserName(Integer userId) {
+        return userDAO.selectOne(Wrappers.<User>lambdaQuery().eq(User::getId, userId)).getUsername();
     }
 }

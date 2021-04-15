@@ -7,6 +7,7 @@ import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.library.manage.entity.AdminUserRole;
 import com.library.manage.entity.Book;
 import com.library.manage.entity.Borrow;
 import com.library.manage.entity.User;
@@ -19,6 +20,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -43,7 +46,7 @@ public class BorrowService {
     //角色 -- 学生
     private final static int STUDENT_ROLE = 10;
     @Autowired
-    AdminUserRoleService adminUserRoleService;
+    private AdminUserRoleService adminUserRoleService;
     @Autowired
     private BorrowMapper borrowmapper;
     @Autowired
@@ -235,15 +238,14 @@ public class BorrowService {
     }
 
     /**
-     * 查询借阅是否超时
-     *
-     * @param userName 用户名
-     * @param id       用户id
+     * 查询借阅是否超时  定时任务  每个月1号凌晨1点
      */
     @Async("asyncPool")
-    public void queryStatus(String userName, int id) {
-        int role = adminUserRoleService.getRole(id);
-        if (STUDENT_ROLE == role) {
+    @Scheduled(cron = "0 0 1 1 * ?")
+    public void queryStatus() {
+        List<AdminUserRole> role = adminUserRoleService.getAll();
+        for (AdminUserRole role1 : role) {
+            String userName = userService.getUserName(role1.getUid());
             Borrow borrow = borrowmapper.selectOne(Wrappers.<Borrow>lambdaQuery()
                     .eq(Borrow::getUsername, userName)
                     .eq(Borrow::getStatus, "1")
@@ -254,9 +256,10 @@ public class BorrowService {
                 try {
                     time = DateUtil.between(df.parse(borrow.getBorrowTime()), DateUtil.date(), DateUnit.DAY);
                 } catch (ParseException e) {
+                    log.error("定时任务错误{}",e.toString());
                     e.printStackTrace();
                 }
-                if (time > 60) {
+                if (time > 90) {
                     User user = new User();
                     user.setUsername(userName);
                     userService.upUser(user);

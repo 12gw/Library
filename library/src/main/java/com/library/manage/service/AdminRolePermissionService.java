@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class AdminRolePermissionService {
     @Autowired
-    AdminRolePermissionMapper adminRolePermissionMapper;
+    private AdminRolePermissionMapper adminRolePermissionMapper;
 
     List<AdminRolePermission> findAllByRid(int rid) {
         return adminRolePermissionMapper.selectList(Wrappers.<AdminRolePermission>lambdaQuery().eq(AdminRolePermission::getRid, rid));

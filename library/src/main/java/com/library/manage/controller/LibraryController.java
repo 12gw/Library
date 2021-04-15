@@ -23,13 +23,13 @@ import java.util.Random;
 @RestController
 public class LibraryController {
     @Autowired
-    BookService bookService;
+    private BookService bookService;
 
     @Autowired
-    MessageBoardService messageBoardService;
+    private MessageBoardService messageBoardService;
 
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     @GetMapping("/api/books")
     @ApiOperation(value = "查询图书列表 - 主页")

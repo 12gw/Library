@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class AdminRoleMenuService {
     @Autowired
-    AdminRoleMenuMapper adminRoleMenuMapper;
+    private AdminRoleMenuMapper adminRoleMenuMapper;
 
     public List<AdminRoleMenu> findAllByRid(int rid) {
         return adminRoleMenuMapper.selectList(Wrappers.<AdminRoleMenu>lambdaQuery().eq(AdminRoleMenu::getRid, rid));

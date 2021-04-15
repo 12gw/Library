@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "角色管理")
 public class RoleController {
     @Autowired
-    AdminRoleService adminRoleService;
+    private AdminRoleService adminRoleService;
     @Autowired
-    AdminPermissionService adminPermissionService;
+    private AdminPermissionService adminPermissionService;
     @Autowired
-    AdminRolePermissionService adminRolePermissionService;
+    private AdminRolePermissionService adminRolePermissionService;
     @Autowired
-    AdminRoleMenuService adminRoleMenuService;
+    private AdminRoleMenuService adminRoleMenuService;
 
     @ApiOperation(value = "查询角色列表")
     @GetMapping("/api/admin/role")

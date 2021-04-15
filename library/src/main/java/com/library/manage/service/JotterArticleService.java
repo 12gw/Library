@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class JotterArticleService {
     @Autowired
-    JotterArticleMapper jotterArticleMapper;
+    private JotterArticleMapper jotterArticleMapper;
 
     public Page<JotterArticle> list(long current, long size) {
         Page<JotterArticle> articlesInDb = new Page<>(current, size);

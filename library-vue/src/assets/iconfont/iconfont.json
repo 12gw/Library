@@ -1,0 +1,79 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "9749365",
+      "name": "我的借阅",
+      "font_class": "file-management-I-borrow",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "9749368",
+      "name": "借阅记录",
+      "font_class": "file-management-borrowed-record",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "9749372",
+      "name": "借阅申请",
+      "font_class": "file-management-borrowing-to-apply-for",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "9749387",
+      "name": "图书录入",
+      "font_class": "book-information-book-entry",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "9749388",
+      "name": "图书查询",
+      "font_class": "book-information-the-book-query",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "9749398",
+      "name": "图书查询",
+      "font_class": "management-books-the-book-query",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "9749399",
+      "name": "图书归还",
+      "font_class": "manage-the-return-of-books",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "11806647",
+      "name": "图书预约",
+      "font_class": "tushuyuyue",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "18564914",
+      "name": "图书",
+      "font_class": "tushu",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "20417714",
+      "name": "邮件",
+      "font_class": "youjian",
+      "unicode": "f2fc",
+      "unicode_decimal": 62204
+    }
+  ]
+}

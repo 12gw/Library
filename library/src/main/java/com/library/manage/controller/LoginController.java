@@ -3,7 +3,6 @@ package com.library.manage.controller;
 import com.library.manage.config.result.Result;
 import com.library.manage.config.result.ResultFactory;
 import com.library.manage.entity.User;
-import com.library.manage.service.BorrowService;
 import com.library.manage.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -24,9 +23,7 @@ import org.springframework.web.util.HtmlUtils;
 public class LoginController {
 
     @Autowired
-    UserService userService;
-    @Autowired
-    BorrowService borrowService;
+    private UserService userService;
 
     @PostMapping("/api/login")
     public Result login(@RequestBody User requestUser) {
@@ -43,7 +40,6 @@ public class LoginController {
             if (!user.isEnabled()) {
                 return ResultFactory.buildFailResult("该用户已被禁用");
             }
-            borrowService.queryStatus(username, user.getId());
             return ResultFactory.buildSuccessResult(username);
         } catch (IncorrectCredentialsException e) {
             return ResultFactory.buildFailResult("密码错误");

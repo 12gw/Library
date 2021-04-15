@@ -15,17 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class AdminPermissionService {
     @Autowired
-    AdminPermissionMapper adminPermissionMapper;
+    private AdminPermissionMapper adminPermissionMapper;
     @Autowired
-    AdminUserRoleService adminUserRoleService;
+    private AdminRoleService adminRoleService;
     @Autowired
-    AdminRoleService adminRoleService;
+    private AdminRolePermissionService adminRolePermissionService;
     @Autowired
-    AdminRolePermissionService adminRolePermissionService;
-    @Autowired
-    AdminRolePermissionMapper adminRolePermissionMapper;
-    @Autowired
-    UserService userService;
+    private AdminRolePermissionMapper adminRolePermissionMapper;
 
     public List<AdminPermission> list() {
         return adminPermissionMapper.selectList(null);

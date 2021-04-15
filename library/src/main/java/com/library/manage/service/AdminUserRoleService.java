@@ -16,10 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class AdminUserRoleService {
     @Autowired
-    AdminUserRoleMapper adminUserRoleMapper;
-
-    @Autowired
-    UserService userService;
+    private AdminUserRoleMapper adminUserRoleMapper;
 
     public List<Integer> listAllByUid(int uid) {
         return adminUserRoleMapper.selectList((Wrappers.<AdminUserRole>lambdaQuery().eq(AdminUserRole::getUid, uid)))
@@ -42,4 +39,12 @@ public class AdminUserRoleService {
     public int getRole(int uid) {
         return adminUserRoleMapper.selectOne(Wrappers.<AdminUserRole>lambdaQuery().eq(AdminUserRole::getUid, uid)).getRid();
     }
+
+    /**
+     * 获取全部角色为10的用户
+     */
+    public List<AdminUserRole> getAll() {
+        return adminUserRoleMapper.selectList(Wrappers.<AdminUserRole>lambdaQuery().eq(AdminUserRole::getRid, 10));
+    }
+
 }

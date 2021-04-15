@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @RestController
 public class JotterController {
     @Autowired
-    JotterArticleService jotterArticleService;
+    private JotterArticleService jotterArticleService;
 
     @PostMapping("api/admin/content/article")
     public Result saveArticle(@RequestBody @Valid JotterArticle article) {
