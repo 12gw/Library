@@ -9,13 +9,15 @@ import com.library.manage.service.BorrowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 public class BorrowController {
     @Autowired
     private BorrowService borrowService;
 
     @PostMapping("/api/admin/saveBorrow")
-    public Result saveBorrow(@RequestBody SaveBorrowVO vo) {
+    public Result saveBorrow(@Valid @RequestBody SaveBorrowVO vo) {
         int i = borrowService.saveBorrow(vo.getBookid(), vo.getBookname(), vo.getType(), vo.getMailAccount());
         if (i == 0) {
             return ResultFactory.buildFailResult("保存失败！");
@@ -39,6 +41,8 @@ public class BorrowController {
         int i = borrowService.updateBorrow(vo.getUsername(), vo.getStatus(), vo.getMoney(), vo.getBookid(), vo.getId());
         if (i == 0) {
             return ResultFactory.buildFailResult("更改失败");
+        }else if (i == 2){
+            return ResultFactory.buildFailResult("请先还书再缴纳罚款");
         }
         return ResultFactory.buildSuccessResult(i);
     }

@@ -2,7 +2,7 @@
   <div>
     <el-row style="height: 840px;">
       <search-bar @onSearch="searchResult" ref="searchBar"></search-bar>
-      <view-switch class="switch"></view-switch>
+<!--      <view-switch class="switch"></view-switch>-->
       <el-tooltip effect="dark" placement="right"
                   v-for="item in books.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                   :key="item.id">
@@ -41,11 +41,11 @@
 
 <script>
   import SearchBar from './SearchBar'
-  import ViewSwitch from './ViewSwitch'
+  // import ViewSwitch from './ViewSwitch'
 
   export default {
     name: 'Books',
-    components: {SearchBar, ViewSwitch},
+    components: {SearchBar},
     data () {
       return {
         books: [],

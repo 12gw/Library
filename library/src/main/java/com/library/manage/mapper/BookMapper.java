@@ -11,8 +11,8 @@ import java.util.List;
 
 @Repository
 public interface BookMapper extends BaseMapper<Book> {
-    @Select("SELECT *,c.name AS categoryName FROM book AS b,category AS c WHERE b.cid=c.id" +
-            "title LIKE CONCAT('%',#{keyWords},'%') OR author LIKE CONCAT('%',#{keyWords},'%')")
+    @Select("SELECT *,c.name AS categoryName FROM book AS b,category AS c WHERE b.cid=c.id " +
+            " AND (title LIKE CONCAT('%',#{keyWords},'%') OR author LIKE CONCAT('%',#{keyWords},'%'))")
     List<Book> searchList(String keyWords);
 
     @Select("<script>SELECT b.*,c.name AS categoryName FROM book AS b,category AS c WHERE b.cid=c.id" +

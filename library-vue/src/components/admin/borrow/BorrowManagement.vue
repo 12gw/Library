@@ -57,6 +57,10 @@
         >刷新</el-button>
       </div>
       <el-table
+        v-loading="loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
         :data="borrows"
         stripe
         style="width: 100%"
@@ -171,6 +175,7 @@
     name: 'BorrowManagement',
     data () {
       return {
+        loading: true,
         bookname: null,
         name: null,
         current: 1,
@@ -257,6 +262,7 @@
           if (resp && resp.data.code === 200) {
             _this.borrows = resp.data.result.records
             _this.total = resp.data.result.total
+            _this.loading = false
           }
         })
       },
@@ -268,18 +274,23 @@
         }).then(() => {
             this.$axios.put('admin/borrow/updateBorrow', {
               username: item.username,
-              // status: item.status,
+              status: item.status,
               money: item.money,
               bookid: item.bookid,
               id: item.id
             }).then(resp => {
               if (resp && resp.data.code === 200) {
                 this.$message({
-                  type: 'info',
+                  type: 'success',
                   message: '缴费成功'
                 })
-                this.loadBorrows()
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: resp.data.message
+                })
               }
+              this.loadBorrows()
             })
           }
         ).catch(() => {
@@ -304,13 +315,13 @@
               }).then(resp => {
               if (resp && resp.data.code === 200) {
                 this.$message({
-                  type: 'info',
+                  type: 'success',
                   message: '还书成功'
                 })
                 this.loadBorrows()
               } else {
                 this.$message({
-                  type: 'info',
+                  type: 'error',
                   message: '还书失败'
                 })
               }
@@ -333,7 +344,7 @@
           }).then(resp => {
           if (resp && resp.data.code === 200) {
             this.$message({
-              type: 'info',
+              type: 'success',
               message: '取书成功！'
             })
             this.loadBorrows()

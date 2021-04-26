@@ -66,11 +66,12 @@
           label="真实姓名"
           fit>
         </el-table-column>
-<!--        <el-table-column-->
-<!--          prop="role.nameZh"-->
-<!--          label="角色名"-->
-<!--          fit>-->
-<!--        </el-table-column>-->
+        <el-table-column
+          prop="roles"
+          label="角色名"
+          :formatter="forDate"
+          fit>
+        </el-table-column>
         <el-table-column
           prop="phone"
           label="手机号"
@@ -145,6 +146,15 @@
         }
       },
       methods: {
+        // 格式化数据  把角色名显示出来
+        forDate (row) {
+          let arr = []
+          row.roles.forEach((item, index) => {
+            arr.push(item.nameZh)
+          })
+          return arr.join(',')
+        },
+        // user表格
         listUsers () {
           var _this = this
           this.$axios.get('/admin/user').then(resp => {
@@ -153,6 +163,7 @@
             }
           })
         },
+        // 角色信息
         listRoles () {
           var _this = this
           this.$axios.get('/admin/role').then(resp => {
@@ -161,6 +172,7 @@
             }
           })
         },
+        // 更改用户状态
         commitStatusChange (value, user) {
           if (user.username !== 'admin') {
             this.$axios.put('/admin/user/status', {

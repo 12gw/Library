@@ -207,11 +207,11 @@
         let param = new URLSearchParams()
         param.append('status', '1')
         param.append('id', item.id)
-        this.$axios.put('admin/updateMessage', param
+        this.$axios.put('admin/message/updateMessage', param
         ).then(resp => {
           if (resp && resp.data.code === 200) {
             this.$message({
-              type: 'info',
+              type: 'success',
               message: resp.data.message
             })
             this.loadMessage(this.current, this.size, this.content, this.status, this.type)

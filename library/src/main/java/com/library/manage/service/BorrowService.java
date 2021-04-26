@@ -69,9 +69,11 @@ public class BorrowService {
             borrow.setBookname(bookname);
             borrow.setBookid(bookid);
             borrow.setType(type);
+//            获取用户名
             Subject subject = SecurityUtils.getSubject();
             String username = subject.getPrincipal().toString();
             borrow.setUsername(username);
+//            判断用户等级
             Integer level = userService.findByUsername(username).getLevel();
             if (level > 20) {
                 return 2;
@@ -82,10 +84,13 @@ public class BorrowService {
                         .between(level >= 10, Book::getCid, 1, 4));
                 if (null != books) {
                     Book book = new Book();
-                    if (books.getStock() > 0 && books.getStock() < books.getSum()) {
+//                    在库不为0
+                    if (books.getStock() > 0 && books.getStock() <= books.getSum()) {
                         if (NORMAL_TYPE.equals(type)) {
+//                            普通借书
                             borrow.setStatus(ORDER_TYPE);
                         } else if (ORDER_TYPE.equals(type)) {
+//                            预约借书
                             borrow.setStatus(YUYUE_TYPE);
                             borrow.setMail(mailAccount);
                         }
@@ -140,18 +145,18 @@ public class BorrowService {
     }
 
     private void upBorrow(DateFormat df, Borrow m) {
-        if (m.getReturnTime() == null && (ORDER_TYPE.equals(m.getStatus()) || YUYUE_TYPE.equals(m.getStatus()))) {
+        if (m.getReturnTime() == null) {
             long time = 0;
             try {
                 time = DateUtil.between(df.parse(m.getBorrowTime()), DateUtil.date(), DateUnit.DAY);
             } catch (ParseException e) {
                 log.error("时间处理出错！");
             }
-            if (time > 60) {
+            if (time > 60 && ORDER_TYPE.equals(m.getStatus())) {
                 m.setMoney((int) (time - 60));
             }
             //如果预约的时间超过一个星期
-            if (time > 7) {
+            if (time > 7 && YUYUE_TYPE.equals(m.getStatus())) {
                 m.setStatus(OVERTIME_TYPE);
                 Book book = bookMapper.selectOne(Wrappers.<Book>lambdaQuery().eq(Book::getId, m.getBookid()));
                 if (null != book && book.getStock() < book.getSum()) {
@@ -170,6 +175,9 @@ public class BorrowService {
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public int updateBorrow(String username, String status, Integer money, Integer bookid, Integer id) {
+        if (ORDER_TYPE.equals(status) && null != money) {
+            return 2;
+        }
         Borrow books = borrowmapper.selectOne(Wrappers.<Borrow>lambdaQuery()
                 .eq(Borrow::getBookid, bookid)
                 .eq(Borrow::getId, id)
@@ -180,7 +188,7 @@ public class BorrowService {
             // 1未还书  传入的status为1时，更新状态为已还书0
             // 2已预约  更新状态为1 未还书
             // 3预约超时
-            if (ORDER_TYPE.equals(status)) {
+            if (ORDER_TYPE.equals(status) && null == money) {
                 borrow.setStatus(NORMAL_TYPE);
                 Book book = bookMapper.selectOne(Wrappers.<Book>lambdaQuery().eq(Book::getId, bookid));
                 if (null != book) {
@@ -207,8 +215,7 @@ public class BorrowService {
             } else if (YUYUE_TYPE.equals(status)) {
                 borrow.setStatus(ORDER_TYPE);
                 borrow.setBorrowTime(DateUtil.now());
-            }
-            if (null != money) {
+            } else if (null != money) {
                 borrow.setMoney(0);
             }
             return borrowmapper.update(borrow, Wrappers.<Borrow>lambdaUpdate()
@@ -222,7 +229,8 @@ public class BorrowService {
     /**
      * 发送预约成功邮件
      */
-    private void order(String mailAccount, String type) {
+    @Async("asyncPool")
+    public void order(String mailAccount, String type) {
         MailAccount account = new MailAccount();
         account.setHost("smtp.qq.com");
         account.setPort(25);
@@ -256,7 +264,7 @@ public class BorrowService {
                 try {
                     time = DateUtil.between(df.parse(borrow.getBorrowTime()), DateUtil.date(), DateUnit.DAY);
                 } catch (ParseException e) {
-                    log.error("定时任务错误{}",e.toString());
+                    log.error("定时任务错误{}", e.toString());
                     e.printStackTrace();
                 }
                 if (time > 90) {
